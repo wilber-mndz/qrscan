@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:qrreadearapp/src/bloc/scans_block.dart';
 import 'package:qrreadearapp/src/page/DirectionPage.dart';
 import 'package:qrreadearapp/src/page/MapPage.dart';
-import 'package:barcode_scan/barcode_scan.dart';       
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:qrreadearapp/src/utils/utils.dart' as utils;
+
+import '../models/ScanModel.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  final scansBloc = new ScansBloc();
   int currentPage = 0;
 
   @override
@@ -20,7 +27,9 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
-            onPressed: (){},
+            onPressed: (){
+              scansBloc.deleteScansAll();
+            },
           )
         ],
       ),
@@ -43,19 +52,30 @@ class _HomePageState extends State<HomePage> {
     // "https://www.youtube.com/user/tamashidroid"
     // geo:13.580605482448895,-88.08716311892397
 
-    // String futureString = '';
+    String futureString = 'https://www.youtube.com/user/tamashidroid';
 
     // try {
     //     futureString = await BarcodeScanner.scan();
     // } catch (e) {
     //   futureString = e.toString();
     // }
-
-    // print('FutureString: $futureString'); 
  
-    // if ( futureString != null ) {
-    //   print('TENEMOS INFORMACION');
-    // }
+    if ( futureString != null ) {
+      final scan = ScanModel(value: futureString);
+      scansBloc.newScan(scan);
+
+      // final scan2 = ScanModel(value: 'geo:13.580605482448895,-88.08716311892397');
+      // scansBloc.newScan(scan2);
+
+      if (Platform.isIOS) {
+        Future.delayed(Duration(microseconds: 750), (){
+          utils.openScan(scan);    
+        });
+      }else{
+        utils.openScan(scan);
+      }
+
+    }
 
   }
 
