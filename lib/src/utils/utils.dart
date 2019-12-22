@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:qrreadearapp/src/models/ScanModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-openScan(ScanModel scan) async {
+openScan(BuildContext context , ScanModel scan) async {
 
   if (scan.type == 'http') {
     if (await canLaunch(scan.value)) {
@@ -10,7 +11,7 @@ openScan(ScanModel scan) async {
       throw 'Could not launch ${scan.value}';
     }
   }else {
-    print('GEO...');
+    Navigator.pushNamed(context, 'showMap', arguments: scan);
   }
   
 }

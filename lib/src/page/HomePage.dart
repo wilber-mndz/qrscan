@@ -40,42 +40,40 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.filter_center_focus),
         onPressed: (){
           // Acceder a la camara 
-          _scanQR();
+          _scanQR(context);
         },
         backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }
 
-   _scanQR() async {
+   _scanQR(BuildContext context) async {
 
     // "https://www.youtube.com/user/tamashidroid"
     // geo:13.580605482448895,-88.08716311892397
 
-    String futureString = 'https://www.youtube.com/user/tamashidroid';
+    String futureString ;
 
-    // try {
-    //     futureString = await BarcodeScanner.scan();
-    // } catch (e) {
-    //   futureString = e.toString();
-    // }
- 
-    if ( futureString != null ) {
-      final scan = ScanModel(value: futureString);
-      scansBloc.newScan(scan);
+    try {
+        futureString = await BarcodeScanner.scan();
+        if ( futureString != null ) {
+          
+          final scan = ScanModel(value: futureString);
+          scansBloc.newScan(scan);
 
-      // final scan2 = ScanModel(value: 'geo:13.580605482448895,-88.08716311892397');
-      // scansBloc.newScan(scan2);
+          if (Platform.isIOS) {
+            Future.delayed(Duration(microseconds: 750), (){
+              utils.openScan(context, scan);    
+            });
+          }else{
+            utils.openScan(context, scan);
+          }
 
-      if (Platform.isIOS) {
-        Future.delayed(Duration(microseconds: 750), (){
-          utils.openScan(scan);    
-        });
-      }else{
-        utils.openScan(scan);
-      }
-
+        }
+    } catch (e) {
+      futureString = e.toString();
     }
+ 
 
   }
 
@@ -104,7 +102,7 @@ class _HomePageState extends State<HomePage> {
           title: Text('Mapa')
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.directions),
+          icon: Icon(Icons.cloud_queue),
           title: Text('Direcciones')
         ),
       ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qrreadearapp/src/page/HomePage.dart';
+import 'package:qrreadearapp/src/page/ShowMapPage.dart';
  
 void main() => runApp(MyApp());
  
@@ -11,7 +12,8 @@ class MyApp extends StatelessWidget {
       title: 'QRReader',
       initialRoute: 'home',
       routes: {
-        'home'    : (BuildContext context) => HomePage()
+        'home'    : (BuildContext context) => HomePage(),
+        'showMap' : (BuildContext context) => ShowMapPage()
       },
       // Personaliamos el tema global de la aplicacion
       theme: ThemeData(
